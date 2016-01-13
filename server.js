@@ -17,7 +17,7 @@ var mongoose = require('mongoose');
 mongoose.connect(url);//('mongodb://node:node@novus.modulusmongo.net:27017/Iganiq8o'); // connect to our database
 
 
-var port = process.env.PORT || 8080;   //set our port
+var port = process.env.PORT || 8100;   //set our port
 
 
 
@@ -70,8 +70,23 @@ router.get('/places',function(req,res){
 
 router.get('/places/:city',function(req,res){
 	TouristPlace.find({ city: req.params.city },function(err,place){
+		if(err){
+			res.send(err);
+			return;
+		}
+		console.log("no errors");
+		res.writeHead(200, {"Content-Type":"application/json"});
+		res.write(JSON.stringify(place));
+		res.end();
+	});
+});
+
+router.get('/places/:city',function(req,res){
+	TouristPlace.find({ city: req.params.city },function(err,place){
 		if(err)
 			res.send(err);
+		if(place.lat)
+
 		res.json(place);
 	});
 });
